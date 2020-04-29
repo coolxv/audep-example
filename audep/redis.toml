@@ -1,0 +1,31 @@
+$include("base.toml")
+
+#主机
+[hosts.centos1]
+host = 'root@$(ip1):22'
+pwd = '123456'
+
+#应用
+[apps.redis]
+file = '''
+       d"$(lcwd)/../redis/"=>d"/opt/redis/"+775"redis-"
+       '''
+config = '''
+         tl"$(lcwd)/../redis/conf/redis.conf"
+         (
+            "^bind"=>"bind 127.0.0.1",
+            "^port"=>"port %{port}",
+            "^daemonize"=>"daemonize yes"
+         )
+         '''
+action = '''
+         r"ls"->0
+         redis::start("/opt/redis/")
+         '''
+
+#任务
+[[tasks]]
+name = 'redis'
+task = '''
+       redis@centos1(port=6379)
+       '''
