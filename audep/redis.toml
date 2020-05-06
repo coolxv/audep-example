@@ -8,7 +8,11 @@ pwd = '123456'
 #应用
 [apps.redis]
 file = '''
-       d"$(lcwd)/../redis/"=>d"/opt/redis/"+775"redis-"
+       d"$(lcwd)/../redis/">>d"/opt/redis/"
+       (
+            "redis-"=>775,
+            "xxx-"=>775
+       )
        '''
 config = '''
          tl"$(lcwd)/../redis/conf/redis.conf"
